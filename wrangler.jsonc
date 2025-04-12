@@ -2,13 +2,15 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "medium-backend",
   "main": "src/index.ts",
-  "compatibility_date": "2025-04-12"
-  // "compatibility_flags": [
-  //   "nodejs_compat"
-  // ],
-  // "vars": {
-  //   "MY_VAR": "my-variable"
-  // },
+  "compatibility_date": "2025-04-12",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "vars": {
+    // this is the connection made by the backend appliation
+    "DATABASE_URL": "prisma://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMDk4MWJhMjQtMzFiNi00NThjLTk2ZmUtZWEwZWIwZDQ2YWVlIiwidGVuYW50X2lkIjoiMzYyNWMzMDJkMjhkOWYwYjU1ZWMyMTViNjEzZWQ5ZWEwZDljOTQ4ZmVhODk3ZjllYmMzZmY0MjgwYTJiODUwYiIsImludGVybmFsX3NlY3JldCI6ImVkZGRiZmY5LTIxOTUtNGEyMy1iZTg4LTcxNzdkYjMyYjgxNCJ9.Gky-pY63dZ-Qlb8kBLJ_WpPJamm-ea9uzIXSkyoZ4mc",
+    "JWT_SECRET": "supersecretkey"
+  },
   // "kv_namespaces": [
   //   {
   //     "binding": "MY_KV_NAMESPACE",
