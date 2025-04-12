@@ -1,10 +1,13 @@
 import { Hono } from "hono";
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client/edge'
+import { withAccelerate } from '@prisma/extension-accelerate'
 import { decode, sign, verify } from 'hono/jwt'
 import { signupInput, signinInput, updateUserInput } from '../validations'
 import { errorHandler } from '../middleware/errorHandler'
 import { HTTPException } from 'hono/http-exception'
 import bcrypt from 'bcryptjs'
+import { Pool } from 'pg'
+import { PrismaPg } from '@prisma/adapter-pg'
 
 export const userRouter = new Hono<{
     Bindings: {
@@ -17,9 +20,10 @@ userRouter.post('/signup', async (c) => {
     try {
         const body = await c.req.json()
         const validatedData = signupInput.parse(body)
-        const prisma = new PrismaClient({
-            datasourceUrl: c.env.DATABASE_URL
-        })
+        
+        const pool = new Pool({ connectionString: c.env.DATABASE_URL })
+        const adapter = new PrismaPg(pool as any)
+        const prisma = new PrismaClient().$extends(withAccelerate())
 
         const hashedPassword = await bcrypt.hash(validatedData.password, 10)
         const user = await prisma.user.create({

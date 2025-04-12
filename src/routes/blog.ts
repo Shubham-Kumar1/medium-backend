@@ -1,5 +1,6 @@
 import { Hono } from "hono";
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client/edge'
+import { withAccelerate } from '@prisma/extension-accelerate'
 import { decode, sign, verify } from 'hono/jwt'
 import { createPostInput, updatePostInput, createCommentInput, paginationInput } from '../validations'
 import { errorHandler } from '../middleware/errorHandler'
@@ -36,9 +37,8 @@ blogRouter.post('/', async(c) => {
         const body = await c.req.json()
         const validatedData = createPostInput.parse(body)
         const authorId = c.get("userId")
-        const prisma = new PrismaClient({
-            datasourceUrl: c.env.DATABASE_URL
-        })
+        
+        const prisma = new PrismaClient().$extends(withAccelerate())
 
         const post = await prisma.post.create({
             data: {
