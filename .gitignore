@@ -86,3 +86,5 @@ wrangler.toml
 # Temporary files
 *.tmp
 *.temp
+
+wrangler.jsonc
